@@ -4,7 +4,7 @@
     <string name="sample_movie_description">A sample description for this particular tv show</string>
     <string name="sample_year">2018</string>
     <string name="title_air_today">Airing Today</string>
-    <string name="title_popuplar">Popular Shows</string>
+    <string name="title_popular">Popular Shows</string>
     <string name="title_status">Status:</string>
     <string name="title_synopsis">Synopsis</string>
     <string name="title_genres">Genres</string>
@@ -12,4 +12,18 @@
     <string name="title_favorites">Favorites</string>
     <string name="title_show_details">Tv Show Details</string>
     <string name="title_tv_shows">Tv Shows</string>
+    <string name="title_activity_basic">BasicActivity</string>
+    <string name="title_cover_letter">Cover letter</string>
+
+    <string name="cover_letter_title">Why I\'d love to work at MAX.ng</string>
+    <string name="cover_letter_content">
+The brand, the movement: MAX.ng changes the way people think about safety of transportation and delivering packages, all on a whole new level. I want to be a part of this movement.
+\n \n The brand, the product: Apart from my skills as an Android developer, I have experience applying machine learning on application level. And with this possibility, UX with MAX.ng can be more personalized, allowing users be more productive by predicting and suggesting actions based on previous interactions. Examples of such personalized suggestions are:
+\n “You have stopped at Domino’s (Yaba) twice during your ride in this week, would you like to include the same  stop with this ride?”
+\n “Your last four packages had a delay of 15 minutes and 38 seconds. This is most likely because your delivery times are around 4pm and 6pm, when traffic is usually very high. How about you change the time?”
+\n \n The brand, the culture: I’ve had a sneak peek into what working at MAX.ng looks like. And yes, I want that too :D
+</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -5,14 +5,25 @@
     android:layout_height="match_parent"
     tools:context=".fragments.AiringTodayFragment">
 
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/tvShowsToday"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingStart="10dp"
-        android:paddingEnd="10dp"
-        tools:listitem="@layout/list_item_tv_show"
-        />
+        android:layout_height="match_parent">
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/tvShowsToday"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/list_item_tv_show" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true" />
+
+    </RelativeLayout>
 
 </FrameLayout>

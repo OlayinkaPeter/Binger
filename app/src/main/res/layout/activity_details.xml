@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".activities.DetailsActivity">
+    android:id="@+id/detailLayout"
+    tools:context=".activities.OldDetailsActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -36,7 +37,7 @@
                 android:id="@+id/moviePoster"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:scaleType="centerCrop" />
+                android:scaleType="fitCenter" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -48,6 +49,7 @@
                 <TextView
                     android:id="@+id/movieTitle"
                     android:layout_width="0dp"
+                    android:textSize="18sp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     tools:text="The Return of The King" />
@@ -80,11 +82,11 @@
 
                 <!--TODO remove includes and add items programmatically from the activity -->
 
-                <include layout="@layout/list_item_genre" />
-
-                <include layout="@layout/list_item_genre" />
-
-                <include layout="@layout/list_item_genre" />
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/genreRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:listitem="@layout/list_item_genre" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -97,11 +99,11 @@
 
                 <!--TODO remove includes and add items programmatically from the activity -->
 
-                <include layout="@layout/list_item_production_company" />
-
-                <include layout="@layout/list_item_production_company" />
-
-                <include layout="@layout/list_item_production_company" />
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/productionCompanyRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:listitem="@layout/list_item_production_company" />
 
 
             </com.google.android.flexbox.FlexboxLayout>

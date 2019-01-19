@@ -46,7 +46,7 @@ Here is the project default project structure that you are to work with
 
     
 ## Instructions
-Clone the repository, build and run the application on an emulator or physical device. What you will see is a basic project structure containing the folder and files listed above. You will need to provide a solution to the *requirements* listed below. You will be using the free movie database [TMDB](https://www.themoviedb.org/), you can checkout their [api documentation](https://www.themoviedb.org/documentation/api) to see how to interact with thier rest endpoint. As it is just a simple structure containing the UI components and data models, you will have to setup the internals of the project like the network and persistence layer, you are to use the provided data models for this.
+Clone the repository, build and run the application on an emulator or physical device. What you will see is a basic project structure containing the folder and files listed above. You will need to provide a solution to the *requirements* listed below. You will be using the free tvShow database [TMDB](https://www.themoviedb.org/), you can checkout their [api documentation](https://www.themoviedb.org/documentation/api) to see how to interact with thier rest endpoint. As it is just a simple structure containing the UI components and data models, you will have to setup the internals of the project like the network and persistence layer, you are to use the provided data models for this.
 
 The project is well commented describing functionality of each code block, and a couple of *TODOs* for you to follow. You are allowed to use what ever architecture pattern you prefer (MVVM, MVC, MVP), to provide a solution to the requirements listed below.
 
