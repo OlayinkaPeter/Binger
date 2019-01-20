@@ -14,19 +14,14 @@ Here is a list of features that it has:
 ## Screenshots
 ### Botton Tabbed Navigation for Airing Today, Popular Tv Shows, and Favorite Tv Shows
 <p align="center">
-<img src="https://github.com/OlayinkaPeter/Toodoo/blob/master/images/1.png" width="30%">
-<img src="https://github.com/OlayinkaPeter/Toodoo/blob/master/images/2.png" width="30%">
-<img src="https://github.com/OlayinkaPeter/Toodoo/blob/master/images/3.png" width="30%">
+
 </p>
 
 
 ### Details Activity
-<img src="https://github.com/OlayinkaPeter/Toodoo/blob/master/images/3.png" width="30%">
 
 
 ### My Cover letter to MAX.ng
-<img src="https://github.com/OlayinkaPeter/Toodoo/blob/master/images/3.png" width="30%">
-<img src="https://github.com/OlayinkaPeter/Toodoo/blob/master/images/3.png" width="30%">
 
     
 ## Libraries Used
