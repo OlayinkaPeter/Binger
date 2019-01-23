@@ -13,18 +13,20 @@ Here is a list of features that it has:
 
 ## Screenshots
 ### Botton Tabbed Navigation for Airing Today, Popular Tv Shows, and Favorite Tv Shows
-<p align="center">
+<p align="start">
 <img src="https://github.com/OlayinkaPeter/Binger/blob/master/screenshots/1.png" width="30%">
 <img src="https://github.com/OlayinkaPeter/Binger/blob/master/screenshots/2.png" width="30%">
 <img src="https://github.com/OlayinkaPeter/Binger/blob/master/screenshots/3.png" width="30%">
 </p>
 
 ### Details Activity
-<img src="https://github.com/OlayinkaPeter/Binger/blob/master/screenshots/4.png" width="30%">
+<img src="https://github.com/OlayinkaPeter/Binger/blob/master/screenshots/6.png" width="30%">
 
 ### My Cover letter to MAX.ng
+<p align="start">
+<img src="https://github.com/OlayinkaPeter/Binger/blob/master/screenshots/4.png" width="30%">
 <img src="https://github.com/OlayinkaPeter/Binger/blob/master/screenshots/5.png" width="30%">
-<img src="https://github.com/OlayinkaPeter/Binger/blob/master/screenshots/6.png" width="30%">
+</p>
     
 ## Libraries Used
 Here is a list of dependencies used:
