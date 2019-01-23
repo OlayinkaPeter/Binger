@@ -8,15 +8,18 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import android.text.TextUtils;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,28 +29,28 @@ import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 import ng.max.binger.R;
 import ng.max.binger.adapters.GenreAdapter;
 import ng.max.binger.adapters.ProductionCompanyAdapter;
-import ng.max.binger.data.ApiClient;
 import ng.max.binger.data.ApiService;
 import ng.max.binger.data.Genre;
 import ng.max.binger.data.TvShow;
 import ng.max.binger.data.ProductionCompany;
+import ng.max.binger.model.DetailsActivityInteractorImpl;
 import ng.max.binger.utils.Constants;
+import ng.max.binger.viewmodel.DetailsActivityViewModel;
+import retrofit2.HttpException;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class DetailsActivity extends AppCompatActivity {
     private static final String TAG = DetailsActivity.class.getSimpleName();
-    private ApiService apiService;
     private CompositeDisposable disposable = new CompositeDisposable();
     private final static String API_KEY = Constants.API_KEY;
 
-    //Binding the views via the Butter Knife library
-    private View rootView;
-    @BindView(R.id.detailLayout)
-    LinearLayout mDetailLayout;
+    private DetailsActivityViewModel detailsActivityViewModel;
+
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
     @BindView(R.id.moviePoster)
     ImageView mMoviePoster;
     @BindView(R.id.movieTitle)
@@ -58,6 +61,11 @@ public class DetailsActivity extends AppCompatActivity {
     TextView mMovieSummary;
     @BindView(R.id.showStatus)
     TextView mShowStatus;
+    @BindView(R.id.genreRecyclerView)
+    RecyclerView genreRecyclerView;
+    @BindView(R.id.productionCompanyRecyclerView)
+    RecyclerView productionCompanyRecyclerView;
+
 
     String movieTitleString;
     int movieId;
@@ -68,8 +76,6 @@ public class DetailsActivity extends AppCompatActivity {
     private List<ProductionCompany> productionCompanyList = new ArrayList<>();
     private ProductionCompanyAdapter productionCompanyAdapter;
 
-    RecyclerView genreRecyclerView, productionCompanyRecyclerView;
-
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
@@ -79,18 +85,13 @@ public class DetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
+
         ButterKnife.bind(this);
 
-        mMoviePoster = findViewById(R.id.moviePoster);
-        mMovieTitle = findViewById(R.id.movieTitle);
-        mMovieYear = findViewById(R.id.movieYear);
-        mMovieSummary = findViewById(R.id.movieSummary);
-        mShowStatus = findViewById(R.id.showStatus);
+        detailsActivityViewModel = new DetailsActivityViewModel(new DetailsActivityInteractorImpl(), AndroidSchedulers.mainThread());
 
-        genreRecyclerView = (RecyclerView) findViewById(R.id.genreRecyclerView);
         genreRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
 
-        productionCompanyRecyclerView = (RecyclerView) findViewById(R.id.productionCompanyRecyclerView);
         productionCompanyRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
 
         genreAdapter = new GenreAdapter(genreList, R.layout.list_item_genre, getApplicationContext());
@@ -109,23 +110,17 @@ public class DetailsActivity extends AppCompatActivity {
         movieTitleString = intent.getExtras().getString("MOVIE_NAME");
         movieId = intent.getExtras().getInt("MOVIE_ID");
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(movieTitleString);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        apiService = ApiClient.getClient().create(ApiService.class);
-
-       // getMovieDetails();
         getMovieDetails(movieId, API_KEY);
     }
 
 
     private void getMovieDetails(int id, String API_KEY) {
         disposable.add(
-                apiService.getMovieDetails(id, API_KEY)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
+                detailsActivityViewModel.getMovieDetails(id, API_KEY)
                         .subscribe(new Consumer<TvShow>() {
                             @Override
                             public void accept(TvShow tvShow) throws Exception {
@@ -147,10 +142,37 @@ public class DetailsActivity extends AppCompatActivity {
                         }, new Consumer<Throwable>() {
                             @Override
                             public void accept(Throwable throwable) throws Exception {
-                                Log.e(TAG, throwable.toString());
+                                showError(throwable);
                             }
                         })
         );
+    }
+
+    private void showError(Throwable e) {
+        String message = "";
+        try {
+            if (e instanceof IOException) {
+                message = "No internet connection!";
+            } else if (e instanceof HttpException) {
+                HttpException error = (HttpException) e;
+                String errorBody = error.response().errorBody().string();
+                JSONObject jObj = new JSONObject(errorBody);
+
+                message = jObj.getString("error");
+            }
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        } catch (JSONException e1) {
+            e1.printStackTrace();
+        } catch (Exception e1) {
+            e1.printStackTrace();
+        }
+
+        if (TextUtils.isEmpty(message)) {
+            message = "Unknown error occurred! Check LogCat.";
+        }
+
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
     @Override

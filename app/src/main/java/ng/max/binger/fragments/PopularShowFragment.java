@@ -22,20 +22,23 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 import ng.max.binger.R;
 import ng.max.binger.activities.DetailsActivity;
 import ng.max.binger.activities.MainActivity;
 import ng.max.binger.adapters.TvShowAdapter;
-import ng.max.binger.data.ApiClient;
 import ng.max.binger.data.ApiService;
 import ng.max.binger.data.AppDatabase;
 import ng.max.binger.data.TvShow;
 import ng.max.binger.data.TvShowResponse;
+import ng.max.binger.model.PopularShowInteractorImpl;
 import ng.max.binger.utils.Constants;
+import ng.max.binger.viewmodel.PopularShowViewModel;
 import retrofit2.HttpException;
 
 /**
@@ -52,7 +55,15 @@ public class PopularShowFragment extends Fragment implements TvShowAdapter.OnMov
     private final static String API_KEY = Constants.API_KEY;
     private List<TvShow> tvShowList = new ArrayList<>();
     private TvShowAdapter mAdapter;
+
+    Unbinder unbinder;
+
+    private PopularShowViewModel popularShowViewModel;
+
+    @BindView(R.id.progressBar)
     ProgressBar progressBar;
+    @BindView(R.id.popularTvShows)
+    RecyclerView recyclerView;
 
     public PopularShowFragment() {
         // Required empty public constructor
@@ -64,18 +75,11 @@ public class PopularShowFragment extends Fragment implements TvShowAdapter.OnMov
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_popular_shows, container, false);
+        unbinder = ButterKnife.bind(this, view);
 
-        progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
+        popularShowViewModel = new PopularShowViewModel(new PopularShowInteractorImpl(), AndroidSchedulers.mainThread());
 
-        if (API_KEY.isEmpty()) {
-            Toast.makeText(getActivity(), "Please obtain your API KEY from themoviedb.org first!", Toast.LENGTH_LONG).show();
-        }
-
-        final RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.popularTvShows);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-        apiService =
-                ApiClient.getClient().create(ApiService.class);
 
         mAdapter = new TvShowAdapter(tvShowList, R.layout.list_item_tv_show, getActivity());
         mAdapter.setListener(this);
@@ -92,9 +96,7 @@ public class PopularShowFragment extends Fragment implements TvShowAdapter.OnMov
 
     private void getPopularMovies(String API_KEY) {
         disposable.add(
-                apiService.getPopularMovies(API_KEY)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
+                popularShowViewModel.getPopularMovies(API_KEY)
                         .subscribe(new Consumer<TvShowResponse>() {
                             @Override
                             public void accept(TvShowResponse tvShowResponse) throws Exception {
@@ -178,5 +180,13 @@ public class PopularShowFragment extends Fragment implements TvShowAdapter.OnMov
         intent.putExtra("MOVIE_ID", tvShow.getId());
 
         startActivity(intent);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        // unbind the view to free some memory
+        unbinder.unbind();
     }
 }

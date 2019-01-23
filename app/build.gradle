@@ -57,7 +57,6 @@ dependencies {
     annotationProcessor "android.arch.persistence.room:compiler:$arch_room_version"
     implementation "android.arch.persistence.room:rxjava2:$arch_room_version"
 
-
     // RxJava library and RxAndroid for Android specific bindings
     implementation 'io.reactivex.rxjava2:rxjava:2.2.5'
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
@@ -86,4 +85,5 @@ dependencies {
 
     //Butterknife library to inject views
     implementation 'com.jakewharton:butterknife:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 }

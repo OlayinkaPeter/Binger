@@ -16,6 +16,8 @@ import android.widget.ToggleButton;
 
 import com.bumptech.glide.Glide;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import ng.max.binger.R;
 import ng.max.binger.data.AppDatabase;
 import ng.max.binger.data.TvShow;
@@ -28,33 +30,27 @@ public class TvShowAdapter extends RecyclerView.Adapter<TvShowAdapter.MovieViewH
     private int rowLayout;
     private Context context;
 
-    private static final String DATABASE_NAME = "favorite_movies_db";
-    private AppDatabase appDatabase;
-
     private OnMovieItemClicked listener;
 
-    private ScaleAnimation scaleAnimation;
-    private BounceInterpolator bounceInterpolator;
-
-
     public static class MovieViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.moviesLayout)
         ConstraintLayout moviesLayout;
+        @BindView(R.id.videoTitle)
         TextView movieTitle;
+        @BindView(R.id.productionYear)
         TextView date;
+        @BindView(R.id.videoDescription)
         TextView movieDescription;
+        @BindView(R.id.videoRating)
         TextView rating;
+        @BindView(R.id.videoPoster)
         ImageView poster;
+        @BindView(R.id.favoriteButton)
         ImageView favoriteButton;
 
         public MovieViewHolder(View v) {
             super(v);
-            moviesLayout = v.findViewById(R.id.moviesLayout);
-            movieTitle = v.findViewById(R.id.videoTitle);
-            date = v.findViewById(R.id.productionYear);
-            movieDescription = v.findViewById(R.id.videoDescription);
-            rating = v.findViewById(R.id.videoRating);
-            poster = v.findViewById(R.id.videoPoster);
-            favoriteButton = v.findViewById(R.id.favoriteButton);
+            ButterKnife.bind(this, v);
         }
     }
 
@@ -97,15 +93,6 @@ public class TvShowAdapter extends RecyclerView.Adapter<TvShowAdapter.MovieViewH
                 }
             }
         });
-
-//        animateFavButton();
-//        holder.favoriteButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-//                //animation
-//                compoundButton.startAnimation(scaleAnimation);
-//            }
-//        });
     }
 
     @Override
@@ -117,22 +104,8 @@ public class TvShowAdapter extends RecyclerView.Adapter<TvShowAdapter.MovieViewH
         this.listener = onMovieItemClicked;
     }
 
-
     public interface OnMovieItemClicked {
         void favoriteButtonClicked(int position);
-
         void containerClicked(int position);
     }
-
-    public void animateFavButton() {
-        scaleAnimation = new ScaleAnimation(0.7f, 1.0f, 0.7f, 1.0f, Animation.RELATIVE_TO_SELF, 0.7f, Animation.RELATIVE_TO_SELF, 0.7f);
-        scaleAnimation.setDuration(500);
-        bounceInterpolator = new BounceInterpolator();
-        scaleAnimation.setInterpolator(bounceInterpolator);
-    }
 }
-
-
-
-
-

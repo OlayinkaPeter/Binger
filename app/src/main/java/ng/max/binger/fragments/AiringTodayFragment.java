@@ -22,28 +22,29 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 import ng.max.binger.R;
 import ng.max.binger.activities.DetailsActivity;
 import ng.max.binger.activities.MainActivity;
 import ng.max.binger.adapters.TvShowAdapter;
-import ng.max.binger.data.ApiClient;
-import ng.max.binger.data.ApiService;
 import ng.max.binger.data.AppDatabase;
 import ng.max.binger.data.TvShow;
 import ng.max.binger.data.TvShowResponse;
+import ng.max.binger.model.AiringTodayInteractorImpl;
 import ng.max.binger.utils.Constants;
+import ng.max.binger.viewmodel.AiringTodayViewModel;
 import retrofit2.HttpException;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class AiringTodayFragment extends Fragment implements TvShowAdapter.OnMovieItemClicked{
+public class AiringTodayFragment extends Fragment implements TvShowAdapter.OnMovieItemClicked {
     private static final String TAG = MainActivity.class.getSimpleName();
-    private ApiService apiService;
     private CompositeDisposable disposable = new CompositeDisposable();
 
     private static final String DATABASE_NAME = "movies_db";
@@ -52,7 +53,15 @@ public class AiringTodayFragment extends Fragment implements TvShowAdapter.OnMov
     private final static String API_KEY = Constants.API_KEY;
     private List<TvShow> tvShowList = new ArrayList<>();
     private TvShowAdapter mAdapter;
+
+    Unbinder unbinder;
+
+    private AiringTodayViewModel airingTodayViewModel;
+
+    @BindView(R.id.progressBar)
     ProgressBar progressBar;
+    @BindView(R.id.tvShowsToday)
+    RecyclerView recyclerView;
 
     public AiringTodayFragment() {
         // Required empty public constructor
@@ -64,18 +73,11 @@ public class AiringTodayFragment extends Fragment implements TvShowAdapter.OnMov
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_airing_today, container, false);
+        unbinder = ButterKnife.bind(this, view);
 
-        progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
+        airingTodayViewModel = new AiringTodayViewModel(new AiringTodayInteractorImpl(), AndroidSchedulers.mainThread());
 
-        if (API_KEY.isEmpty()) {
-            Toast.makeText(getActivity(), "Please obtain your API KEY from themoviedb.org first!", Toast.LENGTH_LONG).show();
-        }
-
-        final RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.tvShowsToday);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-        apiService =
-                ApiClient.getClient().create(ApiService.class);
 
         mAdapter = new TvShowAdapter(tvShowList, R.layout.list_item_tv_show, getActivity());
         mAdapter.setListener(this);
@@ -92,9 +94,7 @@ public class AiringTodayFragment extends Fragment implements TvShowAdapter.OnMov
 
     private void getTVAiringToday(String API_KEY) {
         disposable.add(
-                apiService.getTVAiringToday(API_KEY)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
+                airingTodayViewModel.getTVAiringToday(API_KEY)
                         .subscribe(new Consumer<TvShowResponse>() {
                             @Override
                             public void accept(TvShowResponse tvShowResponse) throws Exception {
@@ -152,7 +152,9 @@ public class AiringTodayFragment extends Fragment implements TvShowAdapter.OnMov
     }
 
     public void hideProgressBar() {
-        progressBar.setVisibility(View.GONE);
+        if(progressBar != null) {
+            progressBar.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -178,5 +180,13 @@ public class AiringTodayFragment extends Fragment implements TvShowAdapter.OnMov
         intent.putExtra("MOVIE_ID", tvShow.getId());
 
         startActivity(intent);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        // unbind the view to free some memory
+        unbinder.unbind();
     }
 }

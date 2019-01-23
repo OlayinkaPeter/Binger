@@ -12,6 +12,8 @@ import com.bumptech.glide.Glide;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import ng.max.binger.R;
 import ng.max.binger.data.ProductionCompany;
 
@@ -22,11 +24,13 @@ public class ProductionCompanyAdapter extends RecyclerView.Adapter<ProductionCom
 
 
     public static class ProductionCompanyViewHolder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.companyLogo)
         ImageView productionCompanyLogo;
 
         public ProductionCompanyViewHolder(View v) {
             super(v);
-            productionCompanyLogo = (ImageView) v.findViewById(R.id.companyLogo);
+            ButterKnife.bind(this, v);
         }
     }
 

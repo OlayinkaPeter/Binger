@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import ng.max.binger.R;
 import ng.max.binger.data.Genre;
 
@@ -19,12 +21,14 @@ public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.GenreViewHol
     private Context context;
 
 
+
 public static class GenreViewHolder extends RecyclerView.ViewHolder {
+    @BindView(R.id.genreName)
     TextView genreName;
 
     public GenreViewHolder(View v) {
         super(v);
-        genreName = (TextView) v.findViewById(R.id.genreName);
+        ButterKnife.bind(this, v);
     }
 }
 

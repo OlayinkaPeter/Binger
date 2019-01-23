@@ -25,6 +25,15 @@
       </value>
     </option>
   </component>
+  <component name="ProjectPlainTextFileTypeManager">
+    <file url="file://$PROJECT_DIR$/app/src/main/java/ng/max/binger/data/ApiService.java" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/ng/max/binger/data/AppDatabase.kt" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/ng/max/binger/data/FavoriteTvShowDao.kt" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/ng/max/binger/data/Genre.kt" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/ng/max/binger/data/ProductionCompany.kt" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/ng/max/binger/data/TvShow.kt" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/ng/max/binger/data/TvShowResponse.kt" />
+  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_7" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>

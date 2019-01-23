@@ -18,7 +18,11 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import ng.max.binger.R;
@@ -36,10 +40,17 @@ public class FavoritesFragment extends Fragment implements TvShowAdapter.OnMovie
 
     private static final String DATABASE_NAME = "movies_db";
     private AppDatabase appDatabase;
+    private CompositeDisposable disposable = new CompositeDisposable();
 
     private List<TvShow> tvShowList = new ArrayList<>();
     private TvShowAdapter mAdapter;
+
+    Unbinder unbinder;
+
+    @BindView(R.id.progressBar)
     ProgressBar progressBar;
+    @BindView(R.id.favoriteShows)
+    RecyclerView recyclerView;
 
     public FavoritesFragment() {
         // Required empty public constructor
@@ -51,12 +62,10 @@ public class FavoritesFragment extends Fragment implements TvShowAdapter.OnMovie
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_favorites, container, false);
+        unbinder = ButterKnife.bind(this, view);
 
         buildRoomDatabase();
 
-        progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
-
-        final RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.favoriteShows);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         mAdapter = new TvShowAdapter(tvShowList, R.layout.list_item_tv_show, getActivity());
@@ -79,23 +88,25 @@ public class FavoritesFragment extends Fragment implements TvShowAdapter.OnMovie
     }
 
     private void getAllFavouriteShows() {
-        appDatabase.favoriteShowDao().getAllFavouriteShows()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<List<TvShow>>() {
-                    @Override
-                    public void accept(List<TvShow> favoriteShows) throws Exception {
-                        tvShowList.clear();
-                        tvShowList.addAll(favoriteShows);
-                        mAdapter.notifyDataSetChanged();
-                        hideProgressBar();
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        Log.e(TAG, throwable.toString());
-                    }
-                });
+        disposable.add(
+                appDatabase.favoriteShowDao().getAllFavouriteShows()
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Consumer<List<TvShow>>() {
+                            @Override
+                            public void accept(List<TvShow> favoriteShows) throws Exception {
+                                tvShowList.clear();
+                                tvShowList.addAll(favoriteShows);
+                                mAdapter.notifyDataSetChanged();
+                                hideProgressBar();
+                            }
+                        }, new Consumer<Throwable>() {
+                            @Override
+                            public void accept(Throwable throwable) throws Exception {
+                                Log.e(TAG, throwable.toString());
+                            }
+                        })
+        );
     }
 
     public void showProgressBar() {
@@ -131,6 +142,24 @@ public class FavoritesFragment extends Fragment implements TvShowAdapter.OnMovie
         intent.putExtra("MOVIE_ID", tvShow.getId());
 
         startActivity(intent);
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if(isVisibleToUser) {
+            if (mAdapter!= null) {
+                getAllFavouriteShows();
+            }
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        // unbind the view to free some memory
+        unbinder.unbind();
     }
 
 }
