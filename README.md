@@ -9,6 +9,7 @@ Here is a list of features that it has:
 - Popular Tv Shows: the user can view the most popular tv shows
 - Tv Show's Details: the user can view a detailed information about any particular tv show
 - Favorite Tv Shows: the user can view his/her selected favorite tv shows.
+- Syncronizing updates: the app synchronizes with TMDB server for updates on latest episodes & seasons
 
 
 ## Screenshots
