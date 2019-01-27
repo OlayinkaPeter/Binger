@@ -23,11 +23,6 @@ Here is a list of features that it has:
 ### Details Activity
 <img src="https://github.com/OlayinkaPeter/Binger/blob/master/screenshots/6.png" width="30%">
 
-### My Cover letter to MAX.ng
-<p align="start">
-<img src="https://github.com/OlayinkaPeter/Binger/blob/master/screenshots/4.png" width="30%">
-<img src="https://github.com/OlayinkaPeter/Binger/blob/master/screenshots/5.png" width="30%">
-</p>
     
 ## Libraries Used
 Here is a list of dependencies used:
